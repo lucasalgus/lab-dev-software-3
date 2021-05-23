@@ -16,6 +16,8 @@ import Parceiro from "./model/parceiro";
 import Professor from "./model/professor";
 import Transacao from "./model/transacao";
 import Vantagem from "./model/vantagem";
+import InstituicaoEnsinoController from "./controller/instituicaoEnsinoController";
+import VantagemController from "./controller/vantagemController";
 
 const app = express();
 const port = 5000;
@@ -33,18 +35,20 @@ db.sequelize.addModels([
 ]);
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.get("/", async (req, res) => {
 	res.send("API Moeda Estudantil");
-	// const adm = await Administrador.create({ usuario_id: 2 });
 });
 
 AdministradorController.initialize(app);
 AlunoController.initialize(app);
+InstituicaoEnsinoController.initialize(app);
 ParceiroController.initialize(app);
 ProfessorController.initialize(app);
 UsuarioController.initialize(app);
+VantagemController.initialize(app);
 
 app.listen(port, () => {
 	console.log(`App listening at http://localhost:${port}`);

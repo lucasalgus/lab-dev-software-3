@@ -7,9 +7,21 @@ class ParceiroController {
 	static initialize(app: Express) {
 		app.get("/parceiro", async (req: any, res: any) => {
 			try {
-				const professores = await Parceiro.findAll();
+				const parceiros = await Parceiro.findAll();
 
-				res.json(professores);
+				res.json(parceiros);
+			} catch (error) {
+				res.json(JSON.stringify(error));
+			}
+		});
+
+		app.get("/parceiro/:id", async (req: any, res: any) => {
+			try {
+				const parceiro = await Parceiro.findOne({
+					where: { usuario_id: +req.params.id },
+				});
+
+				res.json(parceiro);
 			} catch (error) {
 				res.json(JSON.stringify(error));
 			}
@@ -25,6 +37,8 @@ class ParceiroController {
 				});
 
 				const parceiro = await Parceiro.create({
+					nome: body.nome,
+					cnpj: body.cnpj,
 					usuario_id: usuario.id,
 				});
 

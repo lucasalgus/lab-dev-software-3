@@ -15,6 +15,18 @@ class AlunoController {
 			}
 		});
 
+		app.get("/aluno/:id", async (req: any, res: any) => {
+			try {
+				const aluno = await Aluno.findOne({
+					where: { usuario_id: +req.params.id },
+				});
+
+				res.json(aluno);
+			} catch (error) {
+				res.json(JSON.stringify(error));
+			}
+		});
+
 		app.post("/aluno", async (req: any, res: any) => {
 			try {
 				const { body } = req;
@@ -31,9 +43,9 @@ class AlunoController {
 					rg: body.rg,
 					endereco: body.endereco,
 					curso: body.curso,
-					saldo: body.saldo,
+					saldo: 0,
 					usuario_id: usuario.id,
-					instituicao_ensino_id: body.instituicao_ensino_id,
+					instituicao_ensino_id: body.instituicaoEnsinoId,
 				});
 
 				res.json(JSON.stringify(aluno));
