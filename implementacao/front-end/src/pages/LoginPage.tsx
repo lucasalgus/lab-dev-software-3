@@ -15,7 +15,7 @@ const LoginPage = () => {
 
 		if (json?.type) {
 			localStorage.setItem("type", json.type);
-			localStorage.setItem("user", json.usuario);
+			localStorage.setItem("user", JSON.stringify(json.usuario));
 			window.location.href = "/";
 		} else {
 			alert("Usuário ou senha inválidos.");

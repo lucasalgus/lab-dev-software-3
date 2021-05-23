@@ -7,9 +7,16 @@ const ProfessoresPage = () => {
 	const [professores, setProfessores] = useState<any[]>([]);
 
 	const getProfessor = async () => {
-		const instituicoes = await getReq("professor");
+		const professores = await getReq("professor");
 
-		setProfessores(instituicoes);
+		setProfessores(professores);
+	};
+
+	const increaseBalance = async () => {
+		await postReq("professor/add-saldo", {});
+		setTimeout(async () => {
+			await getProfessor();
+		}, 100);
 	};
 
 	const addProfessor = async (event: FormEvent) => {
@@ -44,6 +51,8 @@ const ProfessoresPage = () => {
 		<>
 			<h1>Professores</h1>
 			<Button onClick={() => setModal(true)}>Adicionar novo</Button>
+			{<>&nbsp;&nbsp;&nbsp;</>}
+			<Button onClick={increaseBalance}>Aumentar Saldo de Todos</Button>
 			<div style={{ marginBottom: "20px" }} />
 			<Table striped bordered hover>
 				<thead>
@@ -53,7 +62,6 @@ const ProfessoresPage = () => {
 						<th>CPF</th>
 						<th>Departamento</th>
 						<th>Saldo</th>
-						<th>Instituicao Ensino</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -64,7 +72,6 @@ const ProfessoresPage = () => {
 							<td>{i.cpf}</td>
 							<td>{i.departamento}</td>
 							<td>{i.saldo}</td>
-							<td>{i.instituicaoEnsinoId}</td>
 						</tr>
 					))}
 				</tbody>

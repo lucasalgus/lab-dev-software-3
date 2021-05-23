@@ -6,28 +6,28 @@ const InstituicoesPage = () => {
 	const [modal, setModal] = useState(false);
 	const [instituicoes, setInstituicoes] = useState<any[]>([]);
 
-	const getProfessor = async () => {
-		const instituicoes = await getReq("instituicao");
+	const getInstituicoes = async () => {
+		const instituicoes = await getReq("instituicao-ensino");
 
 		setInstituicoes(instituicoes);
 	};
 
-	const addProfessor = async (event: FormEvent) => {
+	const addInstituicao = async (event: FormEvent) => {
 		event.preventDefault();
 		const target = event.target as any;
 
 		const nome = target.elements.nome.value;
 
-		await postReq("professor", {
+		await postReq("instituicao-ensino", {
 			nome,
 		});
 
-		await getProfessor();
+		await getInstituicoes();
 		setModal(false);
 	};
 
 	useEffect(() => {
-		getProfessor().then();
+		getInstituicoes().then();
 	}, []);
 
 	return (
@@ -53,9 +53,9 @@ const InstituicoesPage = () => {
 			</Table>
 			<Modal show={modal} onHide={() => setModal(false)}>
 				<Modal.Header>
-					<Modal.Title>Cadastrar Professor</Modal.Title>
+					<Modal.Title>Cadastrar Instituição</Modal.Title>
 				</Modal.Header>
-				<Form onSubmit={addProfessor}>
+				<Form onSubmit={addInstituicao}>
 					<Modal.Body>
 						<Form.Group controlId="nome">
 							<Form.Label>Nome</Form.Label>

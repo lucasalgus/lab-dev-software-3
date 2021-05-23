@@ -6,8 +6,38 @@ import { clearType, getType } from "./api/auth";
 import LoginPage from "./pages/LoginPage";
 import ProfessoresPage from "./pages/ProfessoresPage";
 import InstituicoesPage from "./pages/InstituicoesPage";
+import CadastroParceiroPage from "./pages/CadastroParceiro";
+import CadastroAlunoPage from "./pages/CadastroAluno";
+import { useEffect, useState } from "react";
+import { getReq } from "./api/api";
+import TransferirMoedasPage from "./pages/TransferirMoedasPage";
+import CadastrarVantagemPage from "./pages/CadastrarVantagemPage";
 
 function App() {
+	const [saldo, setSaldo] = useState(0);
+
+	useEffect(() => {
+		const json = localStorage.getItem("user");
+
+		if (!json) {
+			return;
+		}
+
+		const user = JSON.parse(json);
+
+		if (getType() === "professor") {
+			getReq(`professor/${user.id}`).then((prof) => {
+				setSaldo(prof.saldo);
+			});
+		}
+
+		if (getType() === "aluno") {
+			getReq(`aluno/${user.id}`).then((aluno) => {
+				setSaldo(aluno.saldo);
+			});
+		}
+	}, []);
+
 	return (
 		<div>
 			<BrowserRouter>
@@ -22,8 +52,11 @@ function App() {
 								<Link className="nav-link" to="/login">
 									Login
 								</Link>
-								<Link className="nav-link" to="/cadastro">
-									Cadastro
+								<Link className="nav-link" to="/cadastro-aluno">
+									Cadastro Aluno
+								</Link>
+								<Link className="nav-link" to="/cadastro-parceiro">
+									Cadastro Parceiro
 								</Link>
 							</>
 						) : null}
@@ -41,7 +74,7 @@ function App() {
 
 						{getType() === "aluno" ? (
 							<>
-								<Link className="nav-link" to="/">
+								<Link className="nav-link" to="/trocar-moedas">
 									Trocar moedas
 								</Link>
 							</>
@@ -49,24 +82,35 @@ function App() {
 
 						{getType() === "parceiro" ? (
 							<>
-								<Link className="nav-link" to="/">
-									Cadastrar vantagem
+								<Link className="nav-link" to="/cadastrar-vantagem">
+									Cadastrar Vantagem
 								</Link>
 							</>
 						) : null}
 
 						{getType() === "professor" ? (
 							<>
-								<Link className="nav-link" to="/">
-									Transferir moedas
+								<Link className="nav-link" to="/transferir-moedas">
+									Transferir Moedas
 								</Link>
 							</>
 						) : null}
 
 						{getType() ? (
-							<Link className="nav-link" to="#" onClick={clearType}>
+							<Link
+								className="nav-link"
+								to="#"
+								onClick={() => {
+									clearType();
+									window.location.reload();
+								}}
+							>
 								Sair
 							</Link>
+						) : null}
+
+						{getType() === "professor" || getType() === "aluno" ? (
+							<span className="nav-link">Saldo: {saldo}</span>
 						) : null}
 					</Nav>
 				</Navbar>
@@ -77,6 +121,18 @@ function App() {
 						</Route>
 						<Route exact path="/login">
 							<LoginPage />
+						</Route>
+						<Route exact path="/cadastro-aluno">
+							<CadastroAlunoPage />
+						</Route>
+						<Route exact path="/cadastro-parceiro">
+							<CadastroParceiroPage />
+						</Route>
+						<Route exact path="/transferir-moedas">
+							<TransferirMoedasPage />
+						</Route>
+						<Route exact path="/cadastrar-vantagem">
+							<CadastrarVantagemPage />
 						</Route>
 						<Route exact path="/professores">
 							<ProfessoresPage />
