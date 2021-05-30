@@ -18,6 +18,7 @@ import Transacao from "./model/transacao";
 import Vantagem from "./model/vantagem";
 import InstituicaoEnsinoController from "./controller/instituicaoEnsinoController";
 import VantagemController from "./controller/vantagemController";
+import TransacaoController from "./controller/transacaoController";
 
 const app = express();
 const port = 5000;
@@ -49,6 +50,7 @@ ParceiroController.initialize(app);
 ProfessorController.initialize(app);
 UsuarioController.initialize(app);
 VantagemController.initialize(app);
+TransacaoController.initialize(app);
 
 app.listen(port, () => {
 	console.log(`App listening at http://localhost:${port}`);

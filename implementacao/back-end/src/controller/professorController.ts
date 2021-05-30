@@ -57,7 +57,7 @@ class ProfessorController {
 					return;
 				}
 
-				if (professor.saldo < body.quantidade) {
+				if (professor.saldo < body.quantidade || professor.saldo <= 0) {
 					return;
 				}
 
@@ -67,11 +67,11 @@ class ProfessorController {
 				professor.save();
 				aluno.save();
 
-				// await Transacao.create({
-				// 	valor: body.quantidade,
-				// 	remetente_id: body.professorId,
-				// 	destinatario: body.alunoId,
-				// });
+				await Transacao.create({
+					valor: body.quantidade,
+					remetente_id: body.professorId,
+					destinatario_id: body.alunoId,
+				});
 
 				res.json({});
 			} catch (error) {

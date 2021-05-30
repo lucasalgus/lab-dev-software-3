@@ -33,7 +33,7 @@ const TransferirMoedasPage = () => {
 			professorId: professor.id,
 		});
 
-		// window.location.reload();
+		window.location.reload();
 	};
 
 	useEffect(() => {

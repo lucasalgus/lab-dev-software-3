@@ -10,27 +10,25 @@ import CadastroParceiroPage from "./pages/CadastroParceiro";
 import CadastroAlunoPage from "./pages/CadastroAluno";
 import { useEffect, useState } from "react";
 import { getReq } from "./api/api";
-import TransferirMoedasPage from "./pages/TransferirMoedasPage";
+import TransferirMoedasProfPage from "./pages/TransferirMoedasProfPage";
 import CadastrarVantagemPage from "./pages/CadastrarVantagemPage";
+import TrocarMoedasPage from "./pages/TrocarMoedasPage";
+import TransacoesPage from "./pages/TransacoesPage";
 
 function App() {
 	const [saldo, setSaldo] = useState(0);
 
 	useEffect(() => {
 		const json = localStorage.getItem("user");
-
 		if (!json) {
 			return;
 		}
-
 		const user = JSON.parse(json);
-
 		if (getType() === "professor") {
 			getReq(`professor/${user.id}`).then((prof) => {
 				setSaldo(prof.saldo);
 			});
 		}
-
 		if (getType() === "aluno") {
 			getReq(`aluno/${user.id}`).then((aluno) => {
 				setSaldo(aluno.saldo);
@@ -77,6 +75,9 @@ function App() {
 								<Link className="nav-link" to="/trocar-moedas">
 									Trocar moedas
 								</Link>
+								<Link className="nav-link" to="/transacoes">
+									Transações
+								</Link>
 							</>
 						) : null}
 
@@ -90,8 +91,11 @@ function App() {
 
 						{getType() === "professor" ? (
 							<>
-								<Link className="nav-link" to="/transferir-moedas">
+								<Link className="nav-link" to="/transferir-moedas-prof">
 									Transferir Moedas
+								</Link>
+								<Link className="nav-link" to="/transacoes">
+									Transações
 								</Link>
 							</>
 						) : null}
@@ -128,14 +132,20 @@ function App() {
 						<Route exact path="/cadastro-parceiro">
 							<CadastroParceiroPage />
 						</Route>
-						<Route exact path="/transferir-moedas">
-							<TransferirMoedasPage />
+						<Route exact path="/trocar-moedas">
+							<TrocarMoedasPage />
+						</Route>
+						<Route exact path="/transferir-moedas-prof">
+							<TransferirMoedasProfPage />
 						</Route>
 						<Route exact path="/cadastrar-vantagem">
 							<CadastrarVantagemPage />
 						</Route>
 						<Route exact path="/professores">
 							<ProfessoresPage />
+						</Route>
+						<Route exact path="/transacoes">
+							<TransacoesPage />
 						</Route>
 						<Route exact path="/instituicoes">
 							<InstituicoesPage />

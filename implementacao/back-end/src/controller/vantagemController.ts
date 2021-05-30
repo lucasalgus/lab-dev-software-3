@@ -2,6 +2,7 @@ import { Express } from "express";
 import { readFile } from "fs";
 import multer from "multer";
 import { resolve } from "path";
+import Aluno from "../model/aluno";
 
 import Vantagem from "../model/vantagem";
 
@@ -71,6 +72,29 @@ class VantagemController {
 				});
 
 				res.json(vantagem);
+			} catch (error) {
+				res.json(JSON.stringify(error));
+			}
+		});
+
+		app.post("/vantagem/trocar/:id", async (req: any, res: any) => {
+			try {
+				const { body } = req;
+
+				const aluno = await Aluno.findOne({ where: { id: +body.alunoId } });
+				const vantagem = await Vantagem.findOne({
+					where: { id: +req.params.id },
+				});
+
+				if (!aluno || !vantagem) {
+					throw new Error();
+				}
+
+				aluno.saldo -= vantagem.valor;
+
+				aluno.save();
+
+				res.json({ code: Math.random().toString(36).split(".")[1] });
 			} catch (error) {
 				res.json(JSON.stringify(error));
 			}
